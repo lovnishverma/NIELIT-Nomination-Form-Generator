@@ -22,6 +22,20 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
         }
 
+        /* --- LOGO CSS --- */
+        .logo-container {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .logo-container img {
+            max-width: 250px;
+            /* Adjusted slightly to fit the web image nicely */
+            height: auto;
+        }
+
+        /* ---------------- */
+
         h2 {
             text-align: center;
             color: #0f2d52;
@@ -126,6 +140,11 @@
 <body>
 
     <div class="form-container">
+
+        <div class="logo-container">
+            <img src="https://www.nielit.gov.in/images/NIELIT_logo.jpg" alt="NIELIT Logo">
+        </div>
+
         <h2>NIELIT Nomination Form</h2>
         <form id="nominationForm">
 
@@ -319,7 +338,7 @@
         });
 
         // App Script Submission Logic
-        // PASTE YOUR GOOGLE APPS SCRIPT WEB APP URL HERE
+        // USING THE SCRIPT ID YOU PROVIDED
         const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz4A7b3YNQsWeOkIiFvXnexRpVftBhRgOl7bVY5lV6MJdv2mQx_sKO1EbrDJ0LU5dVjvw/exec";
 
         document.getElementById('nominationForm').addEventListener('submit', async function (e) {
