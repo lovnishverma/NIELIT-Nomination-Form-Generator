@@ -194,9 +194,9 @@ def _merge_non_empty(parts, sep=" | "):
 def _build_education_block(row_data):
     lines = []
     for i in range(1, 6):
-        year   = _safe(row_data, f"Edu{i}_Year")
+        year = _safe(row_data, f"Edu{i}_Year")
         degree = _safe(row_data, f"Edu{i}_Degree")
-        univ   = _safe(row_data, f"Edu{i}_University")
+        univ = _safe(row_data, f"Edu{i}_University")
         if any([year, degree, univ]):
             lines.append(f"{i}. {year} – {degree} – {univ}".strip(" –"))
     return "\n".join(lines)
@@ -205,8 +205,8 @@ def _build_education_block(row_data):
 def _build_experience_block(row_data):
     lines = []
     for i in range(1, 6):
-        year   = _safe(row_data, f"Exp{i}_Year")
-        area   = _safe(row_data, f"Exp{i}_Area_of_Expertise")
+        year = _safe(row_data, f"Exp{i}_Year")
+        area = _safe(row_data, f"Exp{i}_Area_of_Expertise")
         centre = _safe(row_data, f"Exp{i}_Centre")
         if any([year, area, centre]):
             lines.append(f"{i}. {year} – {area} – {centre}".strip(" –"))
@@ -235,43 +235,77 @@ def enrich_row_data(row_data: dict, form_type: str) -> dict:
 
     # Step 3 – composite / derived fields
     normalized.setdefault("Organisation_Department",
-        _merge_non_empty([_safe(normalized, "Organisation"),
-                          _safe(normalized, "Department")], " / "))
+                          _merge_non_empty([_safe(normalized, "Organisation"),
+                                            _safe(normalized, "Department")], " / "))
 
     normalized.setdefault("Contact_Number_Email",
-        _merge_non_empty([_safe(normalized, "Contact_Number"),
-                          _safe(normalized, "Email")], " / "))
+                          _merge_non_empty([_safe(normalized, "Contact_Number"),
+                                            _safe(normalized, "Email")], " / "))
 
     normalized.setdefault("Institute_Address_Contact_Email",
-        _merge_non_empty([_safe(normalized, "Institute_Address"),
-                          _safe(normalized, "Institute_Contact"),
-                          _safe(normalized, "Institute_Email")], " / "))
+                          _merge_non_empty([_safe(normalized, "Institute_Address"),
+                                            _safe(normalized,
+                                                  "Institute_Contact"),
+                                            _safe(normalized, "Institute_Email")], " / "))
 
     if not normalized.get("Educational_Qualifications"):
-        normalized["Educational_Qualifications"] = _build_education_block(normalized)
+        normalized["Educational_Qualifications"] = _build_education_block(
+            normalized)
 
     if not normalized.get("Research_Technical_Experience"):
-        normalized["Research_Technical_Experience"] = _build_experience_block(normalized)
+        normalized["Research_Technical_Experience"] = _build_experience_block(
+            normalized)
 
     normalized.setdefault("Applicant_Name",
-        normalized.get("Name") or normalized.get("Candidate_Name") or "")
+                          normalized.get("Name") or normalized.get("Candidate_Name") or "")
 
     normalized.setdefault("Gov_ID_Number",
-        normalized.get("Aadhar") or "")
+                          normalized.get("Aadhar") or "")
+
+    normalized.setdefault("Organization_Academic_Institute",
+                          normalized.get("Organisation", ""))
+
+    normalized.setdefault("Role", "Co-Lead")
 
     # Friendly date today for signing fields
     normalized.setdefault("Today_Date", datetime.today().strftime("%d-%m-%Y"))
 
+    # ==========================================
+    # FIX 1: Format HTML dates (YYYY-MM-DD) to standard Indian dates (DD-MM-YYYY)
+    # ==========================================
+    for date_field in ["DOB", "Course_Start_Date"]:
+        val = normalized.get(date_field, "")
+        if val and "-" in val:
+            try:
+                # If it starts with a 4-digit year, reformat it
+                if len(val.split("-")[0]) == 4:
+                    dt = datetime.strptime(val, "%Y-%m-%d")
+                    normalized[date_field] = dt.strftime("%d-%m-%Y")
+            except Exception:
+                pass
+
+    # ==========================================
+    # FIX 2: Remove .0 decimals from Pandas reading blank numbers
+    # ==========================================
+    for key, val in normalized.items():
+        val_str = str(val).strip()
+        # If the value ends in exactly ".0", chop off the last two characters
+        if val_str.endswith(".0"):
+            normalized[key] = val_str[:-2]
+        else:
+            # Ensure everything else is saved as a clean string to avoid injection errors
+            normalized[key] = val_str
+
     return normalized
 
-
 # ─── DOCX replacement ────────────────────────────────────────────────────────
+
 
 def _build_replacements(data: dict) -> dict:
     """Build {key: value} for every placeholder variant."""
     replacements = {}
     for key, value in data.items():
-        key_str   = str(key).strip()
+        key_str = str(key).strip()
         value_str = "" if value is None else str(value)
         for variant in {key_str, key_str.upper(), key_str.lower()}:
             replacements[variant] = value_str
@@ -362,7 +396,8 @@ def read_csv_safely(file_storage) -> pd.DataFrame:
             return pd.read_csv(BytesIO(raw), encoding=enc)
         except Exception:
             continue
-    raise ValueError("Could not decode CSV. Please save as UTF-8 and try again.")
+    raise ValueError(
+        "Could not decode CSV. Please save as UTF-8 and try again.")
 
 
 # ─── Routes ──────────────────────────────────────────────────────────────────
@@ -385,7 +420,8 @@ def index():
                 df = read_csv_safely(file)
             except Exception as exc:
                 logging.error(f"CSV read error: {exc}")
-                flash("Failed to read the CSV file. Ensure it is not corrupted.", "error")
+                flash(
+                    "Failed to read the CSV file. Ensure it is not corrupted.", "error")
                 return redirect(request.url)
 
             if df.empty:
@@ -394,17 +430,17 @@ def index():
 
             df.columns = [str(c).strip() for c in df.columns]
 
-            timestamp     = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-            memory_zip    = BytesIO()
+            timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+            memory_zip = BytesIO()
             success_count = 0
-            error_count   = 0
-            used_names    = set()
-            skipped_rows  = []
+            error_count = 0
+            used_names = set()
+            skipped_rows = []
 
             with tempfile.TemporaryDirectory() as tmp:
                 with zipfile.ZipFile(memory_zip, "w", zipfile.ZIP_DEFLATED) as zf:
                     for idx, row in df.iterrows():
-                        row_data  = row.fillna("").to_dict()
+                        row_data = row.fillna("").to_dict()
                         form_type = infer_form_type(row_data)
 
                         if not form_type:
@@ -414,11 +450,12 @@ def index():
                                 "or both Track and Level columns."
                             )
                             logging.error(msg)
-                            skipped_rows.append(f"Row {idx + 2}: unknown form type")
+                            skipped_rows.append(
+                                f"Row {idx + 2}: unknown form type")
                             error_count += 1
                             continue
 
-                        template_key  = FORM_TYPE_TEMPLATE[form_type]
+                        template_key = FORM_TYPE_TEMPLATE[form_type]
                         template_path = TEMPLATE_MAP[template_key]
 
                         if not template_path.exists():
@@ -428,25 +465,29 @@ def index():
                                 "Place it in the docxtemplates/ folder."
                             )
                             logging.error(msg)
-                            skipped_rows.append(f"Row {idx + 2}: template missing ({template_key})")
+                            skipped_rows.append(
+                                f"Row {idx + 2}: template missing ({template_key})")
                             error_count += 1
                             continue
 
                         enriched = enrich_row_data(row_data, form_type)
-                        name     = (
+                        name = (
                             enriched.get("Name") or
                             enriched.get("Candidate_Name") or
                             f"Applicant_{idx + 2}"
                         )
-                        safe_name    = sanitize_filename(name, f"Applicant_{idx + 2}")
-                        out_filename = unique_output_name(safe_name, form_type, used_names)
-                        out_path     = Path(tmp) / out_filename
+                        safe_name = sanitize_filename(
+                            name, f"Applicant_{idx + 2}")
+                        out_filename = unique_output_name(
+                            safe_name, form_type, used_names)
+                        out_path = Path(tmp) / out_filename
 
                         if fill_form(template_path, out_path, enriched):
                             zf.write(str(out_path), arcname=out_filename)
                             success_count += 1
                         else:
-                            skipped_rows.append(f"Row {idx + 2} ({name}): fill_form error")
+                            skipped_rows.append(
+                                f"Row {idx + 2} ({name}): fill_form error")
                             error_count += 1
 
             memory_zip.seek(0)
