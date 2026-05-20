@@ -27,10 +27,10 @@ Domain-specific fields (`{Domain}`, `{Course_Name}`, `{Course_Level}`, `{Program
 | Placeholder | Example value |
 |---|---|
 | `{Domain}` | Augmented and Virtual Reality (AR & VR) |
-| `{Course_Name}` | GOT – AR & VR (Basic) |
+| `{Course_Name}` | Bootcamp /GOT – ARVR / BDDS |
 | `{Course_Level}` | Basic / Advanced / Bootcamp |
 | `{Technology}` | Augmented and Virtual Reality |
-| `{Program_Type}` | GOT (Government of Tomorrow) |
+| `{Program_Type}` | GOT (Government Official Training) |
 | `{Form_Title}` | ARVR GOT-Basic Nomination Form |
 | `{Today_Date}` | 20-05-2026 |
 
