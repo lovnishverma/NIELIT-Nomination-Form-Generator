@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NIELIT Dynamic Nomination Form</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f4f8;
+            padding: 20px;
+            color: #333;
+        }
+
+        .form-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        /* --- LOGO CSS --- */
+        .logo-container {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .logo-container img {
+            max-width: 250px;
+            /* Adjusted slightly to fit the web image nicely */
+            height: auto;
+        }
+
+        /* ---------------- */
+
+        h2 {
+            text-align: center;
+            color: #0f2d52;
+            border-bottom: 2px solid #e8a020;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+
+        fieldset {
+            border: 1px solid #d0d8e4;
+            border-radius: 6px;
+            padding: 20px;
+            margin-bottom: 25px;
+            background: #fafbfc;
+            transition: all 0.3s ease;
+        }
+
+        legend {
+            background: #1a4f8a;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .row {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+
+        .col {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            font-size: 13px;
+            color: #0f2d52;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-family: inherit;
+        }
+
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: #1a4f8a;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: 1fr 2fr 2fr;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            background: #1a4f8a;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #0f2d52;
+        }
+
+        #statusMessage {
+            margin-top: 20px;
+            text-align: center;
+            font-weight: bold;
+            padding: 10px;
+            border-radius: 4px;
+        }
+
+        /* Utility class to hide elements smoothly */
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="form-container">
+
+        <div class="logo-container">
+            <img src="https://www.nielit.gov.in/images/NIELIT_logo.jpg" alt="NIELIT Logo">
+        </div>
+
+        <h2>NIELIT Nomination Form</h2>
+        <form id="nominationForm">
+
+            <fieldset>
+                <legend>1. Programme Details</legend>
+                <div class="row">
+                    <div class="col">
+                        <label>Track *</label>
+                        <select name="Track" required>
+                            <option value="">Select Track</option>
+                            <option value="ARVR">Augmented & Virtual Reality (ARVR)</option>
+                            <option value="BDDS">Big Data & Data Science (BDDS)</option>
+                        </select>
+                    </div>
+                    <div class="col">
+                        <label>Level *</label>
+                        <select name="Level" id="levelSelect" required>
+                            <option value="">Select Level</option>
+                            <option value="Basic">Basic (GOT)</option>
+                            <option value="Advanced">Advanced (GOT)</option>
+                            <option value="Bootcamp">Bootcamp</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label>Course Start Date</label>
+                        <input type="date" name="Course_Start_Date">
+                    </div>
+                    <div class="col">
+                        <label>Resource Centre Name</label>
+                        <input type="text" name="Resource_Centre_Name" value="NIELIT Chandigarh">
+                    </div>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>2. Applicant Details</legend>
+                <div class="row">
+                    <div class="col" style="flex: 0.3">
+                        <label>Title *</label>
+                        <select name="Title" required>
+                            <option value="" disabled selected>Select Title</option>
+                            <option value="Mr.">Mr.</option>
+                            <option value="Ms.">Ms.</option>
+                            <option value="Dr.">Dr.</option>
+                            <option value="Prof.">Prof.</option>
+                        </select>
+                    </div>
+                    <div class="col" style="flex: 0.7">
+                        <label>Full Name *</label>
+                        <input type="text" name="Name" required placeholder="As on Govt ID">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col"><label>DOB *</label><input type="date" name="DOB" required></div>
+                    <div class="col">
+                        <label>Gender *</label>
+                        <select name="Gender" required>
+                            <option value="M">Male (M)</option>
+                            <option value="F">Female (F)</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col"><label>Contact Number *</label><input type="tel" name="Contact_Number"
+                            pattern="[6-9][0-9]{9}" required></div>
+                    <div class="col"><label>Email ID *</label><input type="email" name="Email" required></div>
+                </div>
+                <div class="row">
+                    <div class="col"><label>Aadhar Number</label><input type="text" name="Aadhar" pattern="[0-9]{12}">
+                    </div>
+                    <div class="col">
+                        <label>Native State & District</label>
+                        <div style="display:flex; gap:10px;">
+                            <input type="text" name="Native_State" placeholder="State">
+                            <input type="text" name="District" placeholder="District">
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>3. Organisation / Institute Details</legend>
+                <div class="row">
+                    <div class="col"><label>Organisation / College Name *</label><input type="text" name="Organisation"
+                            required></div>
+                    <div class="col" id="deptCol"><label>Department</label><input type="text" name="Department"></div>
+                </div>
+                <div class="row">
+                    <div class="col"><label>Designation *</label><input type="text" name="Designation" required
+                            placeholder="e.g. Data Analyst, Student"></div>
+                    <div class="col">
+                        <label>Status *</label>
+                        <select name="Status" required>
+                            <option value="Pursuing">Pursuing</option>
+                            <option value="In-service">In-service</option>
+                            <option value="Passed out">Passed out</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="col">
+                        <label>Beneficiary Category *</label>
+                        <select name="Beneficiary_Category" required>
+                            <option value="Career aspirant/Student">Career aspirant/Student</option>
+                            <option value="IT Employees">IT Employees</option>
+                            <option value="Faculty">Faculty</option>
+                            <option value="Government Employee">Government Employee</option>
+                        </select>
+                    </div>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>4. Educational Qualifications</legend>
+                <label>Highest Qualification</label>
+                <input type="text" name="Highest_Qualification"
+                    placeholder="e.g. B.Tech CSE (Required for Bootcamp & GOT)">
+
+                <div id="detailedEducationSection" class="hidden" style="margin-top: 15px;">
+                    <p style="font-size: 12px; color: #666; margin-bottom: 10px;">Please list up to 3 detailed
+                        qualifications (Required for GOT forms).</p>
+                    <div class="grid-3">
+                        <div><strong>Year</strong></div>
+                        <div><strong>Degree / Programme</strong></div>
+                        <div><strong>University / Board</strong></div>
+                        <input type="text" name="Edu1_Year"><input type="text" name="Edu1_Degree"><input type="text"
+                            name="Edu1_University">
+                        <input type="text" name="Edu2_Year"><input type="text" name="Edu2_Degree"><input type="text"
+                            name="Edu2_University">
+                        <input type="text" name="Edu3_Year"><input type="text" name="Edu3_Degree"><input type="text"
+                            name="Edu3_University">
+                    </div>
+                </div>
+            </fieldset>
+
+            <fieldset id="detailedExperienceSection" class="hidden">
+                <legend>5. Technical / Project Experience</legend>
+                <div class="grid-3">
+                    <div><strong>Year</strong></div>
+                    <div><strong>Area of Expertise</strong></div>
+                    <div><strong>Centre / Organisation</strong></div>
+                    <input type="text" name="Exp1_Year"><input type="text" name="Exp1_Area_of_Expertise"><input
+                        type="text" name="Exp1_Centre">
+                    <input type="text" name="Exp2_Year"><input type="text" name="Exp2_Area_of_Expertise"><input
+                        type="text" name="Exp2_Centre">
+                    <input type="text" name="Exp3_Year"><input type="text" name="Exp3_Area_of_Expertise"><input
+                        type="text" name="Exp3_Centre">
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>6. Previous FSP Details</legend>
+                <div class="row">
+                    <div class="col" style="flex: 0.3;">
+                        <label>Previous FSP Program? *</label>
+                        <select name="Previous_FSP_Program" required>
+                            <option value="No">No</option>
+                            <option value="Yes">Yes</option>
+                        </select>
+                    </div>
+                    <div class="col" style="flex: 0.7;">
+                        <label>If Yes, Provide Details</label>
+                        <input type="text" name="Previous_FSP_Details_1" placeholder="Program / Centre / Date">
+                    </div>
+                </div>
+            </fieldset>
+
+            <button type="submit" id="submitBtn">Submit Nomination</button>
+            <div id="statusMessage"></div>
+        </form>
+    </div>
+
+    <script>
+        // Dynamic UI Logic
+        const levelSelect = document.getElementById('levelSelect');
+        const detailedEducationSection = document.getElementById('detailedEducationSection');
+        const detailedExperienceSection = document.getElementById('detailedExperienceSection');
+
+        levelSelect.addEventListener('change', function () {
+            if (this.value === 'Bootcamp' || this.value === '') {
+                // Hide verbose sections for Bootcamp
+                detailedEducationSection.classList.add('hidden');
+                detailedExperienceSection.classList.add('hidden');
+            } else {
+                // Show verbose sections for GOT (Basic/Advanced)
+                detailedEducationSection.classList.remove('hidden');
+                detailedExperienceSection.classList.remove('hidden');
+            }
+        });
+
+        // App Script Submission Logic
+        // USING THE SCRIPT ID YOU PROVIDED
+        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz4A7b3YNQsWeOkIiFvXnexRpVftBhRgOl7bVY5lV6MJdv2mQx_sKO1EbrDJ0LU5dVjvw/exec";
+
+        document.getElementById('nominationForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const btn = document.getElementById('submitBtn');
+            const msg = document.getElementById('statusMessage');
+            btn.disabled = true;
+            btn.innerText = "Submitting...";
+
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData.entries());
+
+            try {
+                const response = await fetch(WEB_APP_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify(data),
+                });
+                const result = await response.json();
+                if (result.status === "success") {
+                    msg.style.color = "#155724"; msg.style.backgroundColor = "#d4edda";
+                    msg.innerText = "Nomination submitted successfully!";
+                    this.reset();
+                    // Trigger change event to reset the form view back to default
+                    levelSelect.dispatchEvent(new Event('change'));
+                }
+            } catch (error) {
+                msg.style.color = "#721c24"; msg.style.backgroundColor = "#f8d7da";
+                msg.innerText = "Network Error. Please try again.";
+            } finally {
+                btn.disabled = false; btn.innerText = "Submit Nomination";
+            }
+        });
+    </script>
+</body>
+
+</html>
